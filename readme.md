@@ -681,11 +681,7 @@ while epoch < num_epochs:
 ![png](VAE-GAN-multi-gpu-celebA_files/VAE-GAN-multi-gpu-celebA_51_1.png)
 
 
-
-![png](VAE-GAN-multi-gpu-celebA_files/VAE-GAN-multi-gpu-celebA_51_2.png)
-
-
-     45%|████▍     | 837/1875 [09:18<11:16,  1.53it/s]
+      1%|          | 13/1875 [00:11<21:35,  1.44it/s]
 
 
 
@@ -693,7 +689,7 @@ while epoch < num_epochs:
 
     KeyboardInterruptTraceback (most recent call last)
 
-    <ipython-input-28-cb0cf60b676c> in <module>()
+    <ipython-input-43-cb0cf60b676c> in <module>()
          28                 KL_param: 1,
          29                 G_param: 1,
     ---> 30                 LL_param: 1
@@ -745,7 +741,7 @@ while epoch < num_epochs:
 
 
 
-![png](VAE-GAN-multi-gpu-celebA_files/VAE-GAN-multi-gpu-celebA_51_5.png)
+![png](VAE-GAN-multi-gpu-celebA_files/VAE-GAN-multi-gpu-celebA_51_4.png)
 
 
 ### This is how we save our network 
@@ -787,6 +783,7 @@ for f in range(n_steps):
 def plt_random_faces(f):
     fig, ax = plt.subplots(nrows=1,ncols=1, figsize=(18,12))
     plt.imshow(canvas[:,:,:,f],interpolation='nearest')
+    plt.title('This slider won\.t work in Github')
     plt.show()
 interact(plt_random_faces, f = (0,n_steps-1,1))
 ```
@@ -898,21 +895,6 @@ for i in range(200):
 ```
 
 
-    
-
-    KeyboardInterruptTraceback (most recent call last)
-
-    <ipython-input-37-58fd4ded1634> in <module>()
-         12     all_z = np.concatenate((all_z,recon_z),axis = 0)
-         13     all_batch = np.concatenate((all_batch,next_batch),axis = 0)
-    ---> 14     all_recon_x = np.concatenate((all_recon_x,recon_x),axis = 0)
-         15     all_attrib = np.concatenate((all_attrib,next_attrib),axis = 0)
-
-
-    KeyboardInterrupt: 
-
-
-
 ```python
 # for each attribute type, get the difference between the mean z-vector of faces with
 #   the attribute, and without the attribute
@@ -953,6 +935,17 @@ ax.imshow(canvas)
 ax.axis('off')
 ```
 
+
+
+
+    (-0.5, 255.5, 127.5, -0.5)
+
+
+
+
+![png](VAE-GAN-multi-gpu-celebA_files/VAE-GAN-multi-gpu-celebA_70_1.png)
+
+
 #### Take random z-points, and add the blonde vector
 
 
@@ -984,6 +977,17 @@ ax.axis('off')
 plt.title('Top: random points in z space | Bottom: random points + blonde vector')
 ```
 
+
+
+
+    <matplotlib.text.Text at 0x7fe6a587a310>
+
+
+
+
+![png](VAE-GAN-multi-gpu-celebA_files/VAE-GAN-multi-gpu-celebA_75_1.png)
+
+
 #### Look at the average blonde person, the average not blonde person, and their difference
 
 
@@ -1012,6 +1016,17 @@ ax.axis('off')
 plt.title('Average Blonde Person | Average Not Blonde Person | ABP-ANBP')
 ```
 
+
+
+
+    <matplotlib.text.Text at 0x7fe0c4218f10>
+
+
+
+
+![png](VAE-GAN-multi-gpu-celebA_files/VAE-GAN-multi-gpu-celebA_79_1.png)
+
+
 ### This implementation is based on a few other things:
 - [Autoencoding beyond pixels](http://arxiv.org/abs/1512.09300) [*(Github)*](https://github.com/andersbll/autoencoding_beyond_pixels)
 - [VAE and GAN implementations in prettytensor/tensorflow (*Github*)](https://github.com/ikostrikov/TensorFlow-VAE-GAN-DRAW)
@@ -1025,12 +1040,48 @@ plt.title('Average Blonde Person | Average Not Blonde Person | ABP-ANBP')
 
 ```python
 # this is just a little hack to convert this as html for the github.io page
-!jupyter nbconvert --to html VAE-GAN-multi-gpu-celebA.ipynb
-!mv VAE-GAN-multi-gpu-celebA.html readme.html
+!jupyter nbconvert --to markdown VAE-GAN-multi-gpu-celebA.ipynb
+!mv VAE-GAN-multi-gpu-celebA.md readme.md
 ```
 
-    [NbConvertApp] Converting notebook VAE-GAN-multi-gpu-celebA.ipynb to html
-    [NbConvertApp] Writing 2303245 bytes to VAE-GAN-multi-gpu-celebA.html
+    [NbConvertApp] Converting notebook VAE-GAN-multi-gpu-celebA.ipynb to markdown
+    [NbConvertApp] Support files will be in VAE-GAN-multi-gpu-celebA_files/
+    [NbConvertApp] Making directory VAE-GAN-multi-gpu-celebA_files
+    [NbConvertApp] Making directory VAE-GAN-multi-gpu-celebA_files
+    [NbConvertApp] Making directory VAE-GAN-multi-gpu-celebA_files
+    [NbConvertApp] Making directory VAE-GAN-multi-gpu-celebA_files
+    [NbConvertApp] Making directory VAE-GAN-multi-gpu-celebA_files
+    [NbConvertApp] Making directory VAE-GAN-multi-gpu-celebA_files
+    [NbConvertApp] Making directory VAE-GAN-multi-gpu-celebA_files
+    [NbConvertApp] Making directory VAE-GAN-multi-gpu-celebA_files
+    [NbConvertApp] Making directory VAE-GAN-multi-gpu-celebA_files
+    [NbConvertApp] Making directory VAE-GAN-multi-gpu-celebA_files
+    [NbConvertApp] Writing 35873 bytes to VAE-GAN-multi-gpu-celebA.md
+
+
+
+```python
+# This just hides errors from keyboard interupts for our demo...
+from IPython.core.display import HTML
+HTML('''
+    <style type="text/css">
+    .output_error {
+        display:none
+    }
+    </style>'''
+)
+```
+
+
+
+
+
+    <style type="text/css">
+    .output_error {
+        display:none
+    }
+    </style>
+
 
 
 
