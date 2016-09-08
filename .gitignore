@@ -1,0 +1,7 @@
+datasets/*
+models/*
+img_align_celeba/
+list_attr_celeba.txt
+img_align_celeba.zip
+*.pyc
+.ipynb_checkpoints/
