@@ -681,7 +681,7 @@ while epoch < num_epochs:
 ![png](VAE-GAN-multi-gpu-celebA_files/VAE-GAN-multi-gpu-celebA_51_1.png)
 
 
-      1%|          | 13/1875 [00:11<21:35,  1.44it/s]
+      1%|          | 16/1875 [00:13<20:40,  1.50it/s]
 
 
 
@@ -689,7 +689,7 @@ while epoch < num_epochs:
 
     KeyboardInterruptTraceback (most recent call last)
 
-    <ipython-input-43-cb0cf60b676c> in <module>()
+    <ipython-input-62-cb0cf60b676c> in <module>()
          28                 KL_param: 1,
          29                 G_param: 1,
     ---> 30                 LL_param: 1
@@ -1056,7 +1056,9 @@ plt.title('Average Blonde Person | Average Not Blonde Person | ABP-ANBP')
     [NbConvertApp] Making directory VAE-GAN-multi-gpu-celebA_files
     [NbConvertApp] Making directory VAE-GAN-multi-gpu-celebA_files
     [NbConvertApp] Making directory VAE-GAN-multi-gpu-celebA_files
-    [NbConvertApp] Writing 35873 bytes to VAE-GAN-multi-gpu-celebA.md
+    [NbConvertApp] Making directory VAE-GAN-multi-gpu-celebA_files
+    [NbConvertApp] Making directory VAE-GAN-multi-gpu-celebA_files
+    [NbConvertApp] Writing 36838 bytes to VAE-GAN-multi-gpu-celebA.md
 
 
 
