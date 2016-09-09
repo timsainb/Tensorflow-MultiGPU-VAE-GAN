@@ -206,7 +206,9 @@ ax[3].imshow(create_image(faces[labels[:,4] == 1][3]), interpolation='nearest')
 
 
 ### Draw out the architecture of our network
-- Include here the network outline
+- Each of these functions represent the <font color="#38761d"><strong>Encoder</strong></font>,
+<font color="#1155cc"><strong>Generator</strong></font>, and <font color="#ff0000"><strong>Discriminator</strong></font> described above. 
+- It would be interesting to try and implement the inception architecture to do the same thi
 
 
 ```
@@ -1003,7 +1005,7 @@ plt.title('Average Blonde Person | Average Not Blonde Person | ABP-ANBP')
     [NbConvertApp] Making directory VAE-GAN-multi-gpu-celebA_files
     [NbConvertApp] Making directory VAE-GAN-multi-gpu-celebA_files
     [NbConvertApp] Making directory VAE-GAN-multi-gpu-celebA_files
-    [NbConvertApp] Writing 33827 bytes to VAE-GAN-multi-gpu-celebA.md
+    [NbConvertApp] Writing 33828 bytes to VAE-GAN-multi-gpu-celebA.md
 
 
 
