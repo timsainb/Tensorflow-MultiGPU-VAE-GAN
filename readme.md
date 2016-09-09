@@ -625,8 +625,8 @@ total_batch = int(np.floor(num_examples / batch_size*num_gpus)) # how many batch
 
 # We balance of generator and discriminators learning rate by using a sigmoid function,
 #  encouraging the generator and discriminator be about equal
-d_real = 0
-d_fake = 0
+d_real = .5
+d_fake = .5
 
 while epoch < num_epochs:    
     for i in tqdm.tqdm(range(total_batch)):
