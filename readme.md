@@ -38,7 +38,7 @@ Train <font color="#ff0000"><strong>Discriminator</strong></font> on minimizatio
 
 
 
-```python
+```
 # Import all of our packages
 
 import os
@@ -62,7 +62,7 @@ from ipywidgets import interact, interactive, fixed
 
 
 
-```python
+```
 dim1 = 64 # first dimension of input data
 dim2 = 64 # second dimension of input data
 dim3 = 3 # third dimension of input data (colors)
@@ -80,7 +80,7 @@ d_learning_rate = 1e-3
 - Set `gpus` to a list of the GPUs you're using. The network will then split up the work between those gpus
 
 
-```python
+```
 gpus = [2] # Here I set CUDA to only see one GPU
 os.environ["CUDA_VISIBLE_DEVICES"]=','.join([str(i) for i in gpus])
 num_gpus = len(gpus) # number of GPUs to use
@@ -90,7 +90,7 @@ num_gpus = len(gpus) # number of GPUs to use
 - open `makedataset.ipynb' for instructions on how to build the dataset
 
 
-```python
+```
 with h5py.File(''.join(['datasets/faces_dataset_new.h5']), 'r') as hf:
     faces = hf['images'].value
     headers = hf['headers'].value
@@ -98,13 +98,13 @@ with h5py.File(''.join(['datasets/faces_dataset_new.h5']), 'r') as hf:
 ```
 
 
-```python
+```
 # Normalize the dataset between 0 and 1
 faces = (faces/255.)
 ```
 
 
-```python
+```
 # Just taking a look and making sure everything works
 plt.imshow(np.reshape(faces[1], (64,64,3)), interpolation='nearest')
 ```
@@ -121,14 +121,14 @@ plt.imshow(np.reshape(faces[1], (64,64,3)), interpolation='nearest')
 
 
 
-```python
+```
 # grab the faces back out after we've flattened them
 def create_image(im):
     return np.reshape(im,(dim1,dim2,dim3))
 ```
 
 
-```python
+```
 # Lets just take a look at our channels
 cm = plt.cm.hot
 test_face = faces[0].reshape(dim1,dim2,dim3)
@@ -155,7 +155,7 @@ ax[3].imshow(create_image(test_face)[:,:,2], interpolation='nearest', cmap=cm)
 
 
 
-```python
+```
 def data_iterator():
     """ A simple data iterator """
     batch_idx = 0
@@ -174,19 +174,19 @@ iter_ = data_iterator()
 ```
 
 
-```python
+```
 iter_ = data_iterator()
 ```
 
 
-```python
+```
 #face_batch, label_batch
 ```
 
 ### Bald people
 
 
-```python
+```
 fig, ax = plt.subplots(nrows=1,ncols=4, figsize=(20,8))
 ax[0].imshow(create_image(faces[labels[:,4] == 1][0]), interpolation='nearest')
 ax[1].imshow(create_image(faces[labels[:,4] == 1][1]), interpolation='nearest')
@@ -209,7 +209,7 @@ ax[3].imshow(create_image(faces[labels[:,4] == 1][3]), interpolation='nearest')
 - Include here the network outline
 
 
-```python
+```
 def encoder(X):
     '''Create encoder network.
     Args:
@@ -279,7 +279,7 @@ def discriminator(D_I):
 - Notice I use `with tf.variable_scope("enc")`. This way, we can reuse these variables using `reuse=True`. We can also specify which variables to train using which error functions based upon the label `enc`
 
 
-```python
+```
 def inference(x):
     """
     Run the models. Called inference because it does the same thing as tensorflow's cifar tutorial
@@ -319,7 +319,7 @@ def inference(x):
 - **notice we clip our values to make sure learning rates don't explode**
 
 
-```python
+```
 def loss(x, x_tilde, z_x_log_sigma_sq, z_x_mean, d_x, d_x_p, l_x, l_x_tilde, dim1, dim2, dim3):
     """
     Loss functions for SSE, KL divergence, Discrim, Generator, Lth Layer Similarity
@@ -348,7 +348,7 @@ def loss(x, x_tilde, z_x_log_sigma_sq, z_x_mean, d_x, d_x_p, l_x, l_x_tilde, dim
 - Basically we're taking a list of gradients from each tower, and averaging them together
 
 
-```python
+```
 def average_gradients(tower_grads):
     """Calculate the average gradient for each shared variable across all towers.
     Note that this function provides a synchronization point across all towers.
@@ -389,12 +389,12 @@ def average_gradients(tower_grads):
 ```
 
 
-```python
+```
 
 ```
 
 
-```python
+```
 def sigmoid(x,shift,mult):
     """
     Using this sigmoid to discourage one network overpowering the other
@@ -406,7 +406,7 @@ def sigmoid(x,shift,mult):
 - This is just my ugly function to regularly plot the output of my network - tensorboard would probably be a better option for this
 
 
-```python
+```
 def plot_network_output():
     """ Just plots the output of the network, error, reconstructions, etc
     """
@@ -439,16 +439,17 @@ def plot_network_output():
     axes = plt.gca()
     leg = plt.legend(handles=[KL_plt, D_plt, G_plt, SSE_plt, LL_plt], fontsize=20)
     leg.get_frame().set_alpha(0.5)
+    plt.show()
     
 ```
 
 
-```python
+```
 graph = tf.Graph()
 ```
 
 
-```python
+```
 # Make lists to save the losses to 
 # You should probably just be using tensorboard to do any visualization(or just use tensorboard...)
 G_loss_list = [] 
@@ -463,7 +464,7 @@ dx_list = []
 ### With your graph, define what a step is (needed for multi-gpu), and what your optimizers are for each of your networks
 
 
-```python
+```
 with graph.as_default():
     #with tf.Graph().as_default(), tf.device('/cpu:0'):
     # Create a variable to count number of train calls
@@ -487,7 +488,7 @@ with graph.as_default():
 
 
 
-```python
+```
 with graph.as_default():
 
     # These are the lists of gradients for each tower 
@@ -544,7 +545,7 @@ with graph.as_default():
 ### Now lets average, and apply those gradients
 
 
-```python
+```
 with graph.as_default():
     # Average the gradients
     grads_e = average_gradients(tower_grads_e)
@@ -560,7 +561,7 @@ with graph.as_default():
 ### Now lets actually run our session
 
 
-```python
+```
 with graph.as_default():
 
     # Start the Session
@@ -573,7 +574,7 @@ with graph.as_default():
 ### Get some example data to do visualizations with
 
 
-```python
+```
 example_data, _ = iter_.next()
 np.shape(example_data)
 ```
@@ -588,7 +589,7 @@ np.shape(example_data)
 ### Initialize our epoch number, and restore a saved network by uncommening `#tf.train...`
 
 
-```python
+```
 epoch = 0
 tf.train.Saver.restore(saver, sess, 'models/faces_multiGPU_64_0000.tfmod')
 ```
@@ -599,7 +600,7 @@ tf.train.Saver.restore(saver, sess, 'models/faces_multiGPU_64_0000.tfmod')
         - we calculate the sigmoid of how the network has been performing, and squash the learning rate using a sigmoid based on that. So if the discriminator has been winning, it's learning rate will be low, and if the generator is winning, it's learning rate will be lower on the next batch.
 
 
-```python
+```
 fig, ax = plt.subplots(nrows=1,ncols=1, figsize=(18,4))
 plt.plot(np.arange(0,1,.01), [sigmoid(i/100.,-.5,10) for i in range(100)])
 ax.set_xlabel('Mean of Discriminator(Real) or Discriminator(Fake)')
@@ -619,7 +620,7 @@ plt.title('Squashing the Learning Rate to balance Discrim/Gen network performanc
 
 
 
-```python
+```
 total_batch = int(np.floor(num_examples / batch_size*num_gpus)) # how many batches are in an epoch
 
 # We balance of generator and discriminators learning rate by using a sigmoid function,
@@ -667,88 +668,32 @@ while epoch < num_epochs:
             IPython.display.clear_output()
             print('Epoch: '+str(epoch))
             plot_network_output()
-        
+  
     # save network
     saver.save(sess,''.join(['models/faces_multiGPU_64_',str(epoch).zfill(4),'.tfmod']))
     epoch +=1
 
 ```
 
-    Epoch: 0
+    Epoch: 46
 
 
 
 ![png](VAE-GAN-multi-gpu-celebA_files/VAE-GAN-multi-gpu-celebA_51_1.png)
 
 
-      1%|          | 16/1875 [00:13<20:40,  1.50it/s]
 
+![png](VAE-GAN-multi-gpu-celebA_files/VAE-GAN-multi-gpu-celebA_51_2.png)
 
 
     
-
-    KeyboardInterruptTraceback (most recent call last)
-
-    <ipython-input-62-cb0cf60b676c> in <module>()
-         28                 KL_param: 1,
-         29                 G_param: 1,
-    ---> 30                 LL_param: 1
-         31             }
-         32        )
-
-
-    /home/AD/tsainbur/.conda/envs/tim_tf/lib/python2.7/site-packages/tensorflow/python/client/session.pyc in run(self, fetches, feed_dict, options, run_metadata)
-        370     try:
-        371       result = self._run(None, fetches, feed_dict, options_ptr,
-    --> 372                          run_metadata_ptr)
-        373       if run_metadata:
-        374         proto_data = tf_session.TF_GetBuffer(run_metadata_ptr)
-
-
-    /home/AD/tsainbur/.conda/envs/tim_tf/lib/python2.7/site-packages/tensorflow/python/client/session.pyc in _run(self, handle, fetches, feed_dict, options, run_metadata)
-        634     try:
-        635       results = self._do_run(handle, target_list, unique_fetches,
-    --> 636                              feed_dict_string, options, run_metadata)
-        637     finally:
-        638       # The movers are no longer used. Delete them.
-
-
-    /home/AD/tsainbur/.conda/envs/tim_tf/lib/python2.7/site-packages/tensorflow/python/client/session.pyc in _do_run(self, handle, target_list, fetch_list, feed_dict, options, run_metadata)
-        706     if handle is None:
-        707       return self._do_call(_run_fn, self._session, feed_dict, fetch_list,
-    --> 708                            target_list, options, run_metadata)
-        709     else:
-        710       return self._do_call(_prun_fn, self._session, handle, feed_dict,
-
-
-    /home/AD/tsainbur/.conda/envs/tim_tf/lib/python2.7/site-packages/tensorflow/python/client/session.pyc in _do_call(self, fn, *args)
-        713   def _do_call(self, fn, *args):
-        714     try:
-    --> 715       return fn(*args)
-        716     except errors.OpError as e:
-        717       message = compat.as_text(e.message)
-
-
-    /home/AD/tsainbur/.conda/envs/tim_tf/lib/python2.7/site-packages/tensorflow/python/client/session.pyc in _run_fn(session, feed_dict, fetch_list, target_list, options, run_metadata)
-        695         return tf_session.TF_Run(session, options,
-        696                                  feed_dict, fetch_list, target_list,
-    --> 697                                  status, run_metadata)
-        698 
-        699     def _prun_fn(session, handle, feed_dict, fetch_list):
-
-
-    KeyboardInterrupt: 
-
-
-
-![png](VAE-GAN-multi-gpu-celebA_files/VAE-GAN-multi-gpu-celebA_51_4.png)
 
 
 ### This is how we save our network 
 - Just uncomment, and name it.
 
 
-```python
+```
 #saver.save(sess,''.join(['models/faces_multiGPU_64_',str(epoch).zfill(4),'.tfmod']))
 ```
 
@@ -756,7 +701,7 @@ while epoch < num_epochs:
 - we're using jupyter widgets to slide through z-space from one point to another
 
 
-```python
+```
 n_steps = 20
 examples = 10
 all_x_recon = np.zeros((batch_size, dim1*dim2*dim3,n_steps))
@@ -779,7 +724,7 @@ for f in range(n_steps):
 
 
 
-```python
+```
 def plt_random_faces(f):
     fig, ax = plt.subplots(nrows=1,ncols=1, figsize=(18,12))
     plt.imshow(canvas[:,:,:,f],interpolation='nearest')
@@ -803,13 +748,13 @@ interact(plt_random_faces, f = (0,n_steps-1,1))
 - We take a look at what makes a neuron respond, by taking a bunch of images, and averaging them based on how much the neuron was activated. 
 
 
-```python
+```
 def norm(x):
     return (x - np.min(x)) / np.max(x - np.min(x))
 ```
 
 
-```python
+```
 # get a bunch of images and their corresponding z points in the network
 recon_z = np.random.normal(0,1,(batch_size,hidden_size))
 recon_x, recon_l = sess.run((x_tilde, l_x_tilde), {z_x: recon_z})
@@ -824,7 +769,7 @@ for i in range(100):
 #### Z-Neurons
 
 
-```python
+```
 num_neurons = 25
 
 neuron = 0
@@ -845,7 +790,7 @@ for a in range(int(np.sqrt(num_neurons))):
 #### Deep Descriminator Neurons
 
 
-```python
+```
 num_neurons = 25
 
 neuron = 0
@@ -867,7 +812,7 @@ for a in range(int(np.sqrt(num_neurons))):
 ### Now lets try some latent space algebra
 
 
-```python
+```
 # Here are the attribute types
 print [str(i) + ': ' + headers[i] for i in range(len(headers))]
 ```
@@ -876,7 +821,7 @@ print [str(i) + ': ' + headers[i] for i in range(len(headers))]
 
 
 
-```python
+```
 # Go through a bunch of inputs, get their z values and their attributes
 iter_ = data_iterator()
 all_batch, all_attrib = iter_.next()
@@ -895,7 +840,7 @@ for i in range(200):
 ```
 
 
-```python
+```
 # for each attribute type, get the difference between the mean z-vector of faces with
 #   the attribute, and without the attribute
 attr_vector_list = []
@@ -912,14 +857,14 @@ for i in range(np.shape(all_attrib)[1]):
 ```
 
 
-```python
+```
 feature_to_look_at = 9 # specify the attribute we want to look at
 ```
 
 #### Look at some blonde people (bottom), and their reconstructions (top)
 
 
-```python
+```
 # show some faces which have this attribute
 recon_faces = all_recon_x[all_attrib[:,feature_to_look_at] == 1,:]
 new_faces = all_batch[all_attrib[:,feature_to_look_at] == 1,:]
@@ -949,19 +894,19 @@ ax.axis('off')
 #### Take random z-points, and add the blonde vector
 
 
-```python
+```
 recon_z = np.random.normal(0,1,(batch_size,hidden_size))
 recon_x = sess.run((x_tilde), {z_x: recon_z})
 ```
 
 
-```python
+```
 recon_z_with_attribute = [recon_z[i] + attr_vector_list[feature_to_look_at] for i in range(len(recon_z))]
 recon_x_with_attribute = sess.run((x_tilde), {z_x: recon_z_with_attribute})
 ```
 
 
-```python
+```
 examples = 8
 canvas = np.zeros((dim1*2,dim2*examples,dim3))
 for i in range(examples):
@@ -970,7 +915,7 @@ for i in range(examples):
 ```
 
 
-```python
+```
 fig, ax = plt.subplots(nrows=1,ncols=1, figsize=(18,6))
 ax.imshow(canvas)
 ax.axis('off')
@@ -991,7 +936,7 @@ plt.title('Top: random points in z space | Bottom: random points + blonde vector
 #### Look at the average blonde person, the average not blonde person, and their difference
 
 
-```python
+```
 recon_z = np.random.normal(0,1,(batch_size,hidden_size))
 recon_z[0] = avg_attr_list[feature_to_look_at]
 recon_z[1] = avg_not_attr_list[feature_to_look_at]
@@ -1001,7 +946,7 @@ recon_x = sess.run((x_tilde), {z_x: recon_z})
 ```
 
 
-```python
+```
 examples = 3
 canvas = np.zeros((dim1,dim2*examples,dim3))
 for i in range(examples):
@@ -1009,7 +954,7 @@ for i in range(examples):
 ```
 
 
-```python
+```
 fig, ax = plt.subplots(nrows=1,ncols=1, figsize=(18,6))
 ax.imshow(canvas)
 ax.axis('off')
@@ -1038,8 +983,8 @@ plt.title('Average Blonde Person | Average Not Blonde Person | ABP-ANBP')
 
 
 
-```python
-# this is just a little hack to convert this as html for the github.io page
+```
+# this is just a little command to convert this as md for the github page
 !jupyter nbconvert --to markdown VAE-GAN-multi-gpu-celebA.ipynb
 !mv VAE-GAN-multi-gpu-celebA.md readme.md
 ```
@@ -1058,35 +1003,10 @@ plt.title('Average Blonde Person | Average Not Blonde Person | ABP-ANBP')
     [NbConvertApp] Making directory VAE-GAN-multi-gpu-celebA_files
     [NbConvertApp] Making directory VAE-GAN-multi-gpu-celebA_files
     [NbConvertApp] Making directory VAE-GAN-multi-gpu-celebA_files
-    [NbConvertApp] Writing 36838 bytes to VAE-GAN-multi-gpu-celebA.md
+    [NbConvertApp] Writing 36972 bytes to VAE-GAN-multi-gpu-celebA.md
 
 
 
-```python
-# This just hides errors from keyboard interupts for our demo...
-from IPython.core.display import HTML
-HTML('''
-    <style type="text/css">
-    .output_error {
-        display:none
-    }
-    </style>'''
-)
 ```
-
-
-
-
-
-    <style type="text/css">
-    .output_error {
-        display:none
-    }
-    </style>
-
-
-
-
-```python
 
 ```
