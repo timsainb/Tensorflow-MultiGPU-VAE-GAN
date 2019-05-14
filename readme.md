@@ -1,3 +1,4 @@
+## UPDATE: See [Generative Models in Tensorflow 2](https://github.com/timsainb/tensorflow2-generative-models) for a Tensorflow 2.X version of VAEGAN.  
 
 # Tensorflow Multi-GPU VAE-GAN implementation
 
